@@ -2,6 +2,8 @@ var app = require('koa')();
 var router = require('koa-router')();
 var koaBody   = require('koa-body')();
 var fs = require('fs');
+var staticServe = require('koa-static');
+
 var dataStorage = './dataStorage/';
 
 
@@ -73,11 +75,11 @@ router
           return file.charAt(0) !== '.';
         });
 
-        var existed = filesList.find((file) => {
+        var exist = filesList.find((file) => {
           return file === requestedFile;
         });
 
-        if (existed === undefined) {
+        if (exist === undefined) {
           this.body = 'File does not exist in data storage';
           resolve();
           return console.log('File is not in data storage');
@@ -101,6 +103,17 @@ router
     var requestedFile = this.file+'.json';
 
     yield new Promise((resolve, reject) => {
+
+      fs.unlink(dataStorage+requestedFile, (err) => {
+        if (err) {
+          this.body = err.message.split(',')[0];
+          resolve();
+        }
+        else {
+          this.body = 'SUCCESS';
+          resolve();
+        }
+      });
 
     });//end of Promise
   });
@@ -149,7 +162,7 @@ router.post('/notes', koaBody, function*(next) {
         filesList.sort(function(a,b){return a-b});
 
         fileName = filesList[filesList.length-1];
-        fileName = ++filesList.length;
+        fileName++;
         fileName = fileName.toString()+'.json';
 
         fs.writeFile(dataStorage+fileName, dataBody, (err) => {
@@ -170,6 +183,9 @@ router.post('/notes', koaBody, function*(next) {
 app
   .use(router.routes())
   .use(router.allowedMethods());
+
+
+app.use(staticServe(__dirname+'/public'));
 
 app.listen(3000, function() {
   console.log('Server started. Listening on port 3000');
