@@ -187,6 +187,4 @@ app
 
 app.use(staticServe(__dirname+'/public'));
 
-app.listen(3000, function() {
-  console.log('Server started. Listening on port 3000');
-});
+module.exports = app;
