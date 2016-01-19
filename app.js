@@ -66,10 +66,11 @@ router.post('/notes', koaBody, function*(next) {
   yield new Promise( (resolve, reject) => {
 
     fs.readdir(dataStorage, (err, filesList) => {
-    if (err) {
-      resolve();
-      return console.log('Cannot read directory of dataStorage: ',err.message);
-    }
+      if (err) {
+        resolve();
+        return console.log('Cannot read directory of dataStorage: ',err.message);
+      }
+      //filter out any hidden file
       filesList = filesList.filter(function(file){
           return file.charAt(0) !== '.';
       });
@@ -92,6 +93,15 @@ router.post('/notes', koaBody, function*(next) {
 
       //if there are json files in storage
       else {
+
+        filesList.forEach(function(fileName, index){
+           var name = parseInt(fileName.split('.')[0]);
+           filesList[index] = name;
+        });
+
+        filesList.sort(function(a,b){return a-b});
+
+        fileName = filesList[filesList.length-1];
         fileName = ++filesList.length;
         fileName = fileName.toString()+'.json';
 
