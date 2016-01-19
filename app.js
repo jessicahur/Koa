@@ -25,11 +25,14 @@ router.get('/notes', function*(next) {
   });
 });
 
+
+//GET specific file, PUT updates to a specific file, DELETE a specific file
 router
   .param('file', function*(id, next) {
     this.file = id;
     yield next;
   })
+  //GET
   .get('/notes/:file', function*(next) {
     var requestedFile = this.file+'.json';
 
@@ -56,6 +59,50 @@ router
       }
     });
     });
+  })
+  //PUT
+  .put('/notes/:file', koaBody, function*(next) {
+    var requestedFile = this.file+'.json';
+    var dataBody = JSON.stringify(this.request.body);
+
+    yield new Promise((resolve, reject) => {
+
+      fs.readdir(dataStorage, (err, filesList) => {
+
+        filesList = filesList.filter((file) => {
+          return file.charAt(0) !== '.';
+        });
+
+        var existed = filesList.find((file) => {
+          return file === requestedFile;
+        });
+
+        if (existed === undefined) {
+          this.body = 'File does not exist in data storage';
+          resolve();
+          return console.log('File is not in data storage');
+        }
+
+        fs.writeFile(dataStorage+requestedFile, dataBody,(err) => {
+          if(err) {
+            this.body = err.message;
+            resolve();
+            return console.log('ERROR!', err.message);
+          }
+          this.body = 'Successfully updated data storage with new content: ' +dataBody+' ('+requestedFile+')';
+          resolve();
+        });
+
+      });//end of readdir
+    });//end of Promise
+  })
+  //DELETE existing file
+  .del('/notes/:file', function*(next) {
+    var requestedFile = this.file+'.json';
+
+    yield new Promise((resolve, reject) => {
+
+    });//end of Promise
   });
 
 //POST
@@ -119,13 +166,6 @@ router.post('/notes', koaBody, function*(next) {
   });
 });
 
-router.put('/notes/:id', function*(next) {
-
-});
-
-router.del('notes/:id', function*(next) {
-
-});
 
 app
   .use(router.routes())
