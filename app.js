@@ -91,7 +91,7 @@ router
             resolve();
             return console.log('ERROR!', err.message);
           }
-          this.body = 'Successfully updated data storage with new content: ' +dataBody+' ('+requestedFile+')';
+          this.body = dataBody;
           resolve();
         });
 
