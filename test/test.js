@@ -2,14 +2,27 @@ var chai = require('chai');
 var chaiHttp = require('chai-http');
 var fs = require('fs');
 var assert = chai.assert;
+var expect = chai.expect;
+var mkdirp = require('mkdirp');
 
 var app = require('../app');
-var expect = chai.expect;
 var dataStorage = './dataStorage/';
 
 chai.use(chaiHttp);
 
 describe('KOA JS CRUD & STATIC SERVE', function() {
+
+    before( done => {
+    mkdirp('./dataStorage', function (err) {
+      if (err) {
+        done(err);
+      }
+      else {
+        console.log('created dataStorage!');
+        done();
+      }
+    });
+  });
 
   it('should send back a list of files in dataStorage for GET /notes', function(done) {
     chai.request(app.callback())
