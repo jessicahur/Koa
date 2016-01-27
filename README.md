@@ -10,7 +10,7 @@ I started using Koa after I have used Express, and the transition was not easy. 
 ### The Up Side
 I spent a few days hating Koa until I finally had a chance to look at many examples of how awesome Promises and Function Generators are, and also read on analyses of programmers about Koa. I changed my mind. After all, the developer behind Express built Koa as a separate framework for several good reasons. Here are the advantages that I think Koa has over Express:
 
-1. Since Koa comes bare-boned, it's extremely light-weight. I was surprised at how fast npm installed Koa. It was significantly faster than installing Express. This also gives you the advantage of installing only the modules you need. Come to think of it, there are probably many other built-in functionalities of Express that I haven't used in my Express-running apps.
+1. Since Koa comes bare-boned, it's extremely light-weight. I was surprised at how fast npm installed Koa. It was significantly faster than installing Express. This also gives you the advantage of installing only the modules you need.
 
 2. It was not very clear in my code since I didn't need many layers of callbacks, but if you write a router that involves several callback functions, you may very well end up with a pyramid of doom. Even if you try to flaten you code with wrappers, the error handlers may very well be called several times, making your code look not very D.R.Y. Also, your code will look much longer and verbose compared to a piece of code that use Promise libraries. Also, with yielded promises in Koa, you can chain the operations.
 
