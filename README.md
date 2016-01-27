@@ -12,7 +12,7 @@ I spent a few days hating Koa until I finally had a chance to look at many examp
 
 1. Since Koa comes bare-boned, it's extremely light-weight. I was surprised at how fast npm installed Koa. It was significantly faster than installing Express. This also gives you the advantage of installing only the modules you need.
 
-2. It was not very clear in my code since I didn't need many layers of callbacks, but if you write a router that involves several callback functions, you may very well end up with a pyramid of doom. Even if you try to flaten you code with wrappers, the error handlers may very well be called several times, making your code look not very D.R.Y. Also, your code will look much longer and verbose compared to a piece of code that use Promise libraries. Also, with yielded promises in Koa, you can chain the operations.
+2. It was not very clear in my code since I didn't need many layers of callbacks, but if you write a router that involves several callback functions, you may very well end up with a pyramid of doom. Even if you try to flaten you code with wrappers, the error handlers may very well be called several times, making your code look not very D.R.Y. Also, your code will look much longer and verbose compared to a piece of code that use Promise libraries. In addition, with yielded promises in Koa, you can chain the operations.
 
 3. Function generator makes it possible to have several async calls in a synchronous way in Koa. I can yield many promises, then combine them all to perform a final operations, or call yield next to pass the control to the downstream middlewares and resume where I left off once the final middleware has run.
 
